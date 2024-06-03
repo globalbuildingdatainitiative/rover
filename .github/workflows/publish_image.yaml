@@ -1,0 +1,43 @@
+name: Publish Container Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  
+env:
+  registry: globalbuildingdatainitiative
+  image_name: rover
+  version: v0.23.0
+  
+jobs:
+  build-image:
+    name: Build and Push Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log into registry ${{ env.registry }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io/${{ env.registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Image
+        run: | 
+          docker build \
+            --build-arg VERSION=${{ env.version }} \
+            -t ghcr.io/${{ env.registry }}/${{ env.name }}:${{ env.tag }} \
+            .
+
+      - name: Push Image
+        if: github.event_name != 'pull_request'
+        run: docker push ghcr.io/${{ env.registry }}/${{ env.name }}:${{ env.tag }}
