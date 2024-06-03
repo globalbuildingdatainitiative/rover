@@ -34,7 +34,7 @@ jobs:
       - name: Build Image
         run: | 
           docker build \
-            --build-arg VERSION=${{ env.version }} \
+            --build-arg VERSION=${{ env.tag }} \
             -t ghcr.io/${{ env.registry }}/${{ env.name }}:${{ env.tag }} \
             .
 
