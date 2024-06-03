@@ -13,7 +13,7 @@ permissions:
   
 env:
   registry: globalbuildingdatainitiative
-  image_name: rover
+  name: rover
   tag: v0.23.0
   
 jobs:
