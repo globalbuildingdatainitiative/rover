@@ -1,6 +1,6 @@
 ARG VERSION
 
-FROM debian:stable-slim as installer
+FROM debian:stable-slim AS installer
 ARG VERSION
 
 RUN apt-get update && apt-get install -y curl unzip
@@ -10,7 +10,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN unzip awscliv2.zip -d /root/aws
 
 
-FROM debian:stable-slim as runner
+FROM debian:stable-slim AS runner
 ARG VERSION
 
 COPY --from=installer /root/.rover/bin/rover /root/.rover/bin/rover
